@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+const posts = await getCollection('posts');
+const tagMap = new Map<string, number>();
+posts.forEach(p => {
+  p.data.tags.forEach(tag => {
+    tagMap.set(tag, (tagMap.get(tag) || 0)+1);
+  })
+})
+---
+<BaseLayout title="标签">
+  <h1 class="text-3xl font-bold mb-8">标签分类</h1>
+  <div class="flex flex-wrap gap-4">
+    {[...tagMap.entries()].map(([tag, count]) => (
+      <div class="bg-blue-50 px-4 py-2 rounded-lg">
+        <span class="font-medium">{tag}</span>
+        <span class="text-slate-500 ml-2">共{count}篇</span>
+      </div>
+    ))}
+  </div>
+</BaseLayout>
